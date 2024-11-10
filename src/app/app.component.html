@@ -1,0 +1,62 @@
+
+<brn-select class="inline-block w-full" placeholder="Sélectionner un projet de charge" name="chargeProject"
+required [(ngModel)]="selectedChargeProject" (ngModelChange)="onChargeProjectChange($event)">
+<hlm-select-trigger class="w-full">
+  <hlm-select-value />
+</hlm-select-trigger>
+<hlm-select-content>
+  <hlm-option *ngFor="let project of chargeProjects" [value]="project">
+    {{ project.first_name }} {{ project.last_name }}
+  </hlm-option>
+</hlm-select-content>
+</brn-select>
+
+<div class="flex flex-col gap-2 w-full" *ngFor="let row of selectedChargeProject?.rows">
+    <div class="flex flex-row gap-4 w-full items-end">
+      <div class="flex flex-col gap-2 w-64">
+        <brn-select class="inline-block w-full" placeholder="Sélectionner une zone" name="zone"
+          [(ngModel)]="row.zone" (ngModelChange)="onZoneChange($event, row)" required>
+          <hlm-select-trigger class="w-full">
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content>
+            <hlm-option *ngFor="let zone of getZones()" [value]="zone">
+              {{ zone.name }}
+            </hlm-option>
+          </hlm-select-content>
+        </brn-select>
+      </div>
+      <div class="flex flex-col gap-2 w-64">
+        <brn-select class="inline-block w-full" placeholder="Sélectionner un prestataire" name="prestataire"
+          required [(ngModel)]="row.prestataire" (ngModelChange)="onPrestataireChange($event, row)">
+          <hlm-select-trigger class="w-full">
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content class="w-[48rem]">
+            <hlm-option *ngFor="let prestataire of getPrestataires(row)" [value]="prestataire">
+              {{ prestataire.name }}
+            </hlm-option>
+            <hlm-option *ngIf="getPrestataires(row).length === 0" [value]="null" [disabled]="true">
+              Aucun prestataire disponible
+            </hlm-option>
+          </hlm-select-content>
+        </brn-select>
+      </div>
+      <div class="flex flex-col gap-2 w-64">
+        <brn-select class="inline-block w-full" placeholder="Sélectionner une typologie" name="typology" required
+          [(ngModel)]="row.typologie" (ngModelChange)="onTypologyChange($event, row)">
+          <hlm-select-trigger class="w-full">
+            <hlm-select-value />
+          </hlm-select-trigger>
+          <hlm-select-content>
+            <hlm-option *ngFor="let typology of typologies" [value]="typology">
+              {{ typology.name }}
+            </hlm-option>
+          </hlm-select-content>
+        </brn-select>
+      </div>
+      <button class="text-red-600" (click)="removeRow(row.id)">
+        <hlm-icon name="lucideX" size="base"></hlm-icon>
+      </button>
+    </div>
+  </div>
